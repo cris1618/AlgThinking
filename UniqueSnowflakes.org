@@ -1,0 +1,36 @@
+#+TITLE: Unique Snowflakes
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
+
+#+begin_src C :results output
+  // Create a simple function to find identical integers in an array
+  void identify_identical(int values[], int n){
+    int i, j;
+
+    for(i = 0; i<n; ++i){
+      for(j = i + 1; i<n; ++i){
+	if(values[i] == values[j]){
+	  return printf("Twin integers found.\n");
+	}
+
+      }
+
+    }
+    printf("No Twin Integers are alike.\n");
+
+  }
+
+
+  int main(){
+    int a[5] = {1, 2, 3, 1, 5};
+    identify_identical(a, 5);
+    return 0;
+
+
+  }
+#+end_src
+
+#+RESULTS:
+: Twin integers found.
