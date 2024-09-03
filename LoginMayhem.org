@@ -46,6 +46,7 @@
    #+RESULTS:
 ** Solution 2: Using a Hash Table
 #+begin_src C
+  // Import libraries
   #include <string.h>
   #include <stdlib.h>
 
