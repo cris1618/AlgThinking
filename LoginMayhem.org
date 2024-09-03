@@ -44,6 +44,7 @@
    #+end_src 
 
    #+RESULTS:
+ 
 ** Solution 2: Using a Hash Table
 #+begin_src C
   // Import libraries
