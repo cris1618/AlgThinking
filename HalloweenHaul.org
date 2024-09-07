@@ -1,0 +1,82 @@
+#+TITLE: Halloween Haul
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
+
+** Trees abd Recursion
+#+begin_src C 
+  #include <stdio.h>
+  #include <stdlib.h>
+
+  // General structure of a Tree's node
+  typedef struct node{
+    int candy;
+    struct node *left, *right;
+  } node;
+
+  // Building a Tree
+  // work bottom-up, uniting subtrees until we reach the root
+  /* node *four = malloc(sizeof(node));
+     four -> candy = 4;
+     four -> left = NULL;
+     four -> right = NULL;
+
+     node *nine = malloc(sizeof(node));
+     nine -> candy = 9;
+     nine -> left = NULL;
+     nine -> right = NULL;
+
+     // Unite the two nodes under a common parent
+     node *B = malloc(sizeof(node));
+     B -> left = four;
+     B -> right = nine;*/
+
+  // Writing two functions to automate the process
+  node *new_house(int candy){
+    node *house = malloc(sizeof(node));
+    if(house == NULL){
+      fprintf(stderr, "malloc error\n");
+      exit(1);
+    }
+    house -> candy = candy;
+    house -> left = NULL;
+    house -> right = NULL;
+    return house;
+  }
+
+  node *non_house(node *left, node *right){
+    node *nonhouse = malloc(sizeof(node));
+    if(nonhouse == NULL){
+      fprintf(stderr, "malloc error\n");
+      exit(1);
+    }
+    nonhouse -> left = left;
+    nonhouse -> right = right;
+    return nonhouse;
+  }
+
+
+  int main(){
+    // Use new helper functions to recreate the nodes
+    node *four = new_house(4);
+    node *nine = new_house(9);
+    node *B = non_house(four, nine);
+    node *fifteen = new_house(15);
+    node *C = non_house(B, fifteen);
+
+    // Printing exercise
+    printf("%d\n", C->right->candy);
+    printf("%d\n", C->left->right->candy);
+    // Print a pointer value instead of a candy value
+    printf("%d\n", C->left->left);
+    printf("%d\n", C->candy);
+  }
+
+#+end_src 
+
+#+RESULTS:
+: 15
+: 9
+: 1926533792
+: 0
