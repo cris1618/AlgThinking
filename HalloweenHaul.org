@@ -4,7 +4,7 @@
 #+STARTUP: overview hideblocks indent
 #+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
 
-** Trees abd Recursion
+** Trees and Recursion
 #+begin_src C 
   #include <stdio.h>
   #include <stdlib.h>
