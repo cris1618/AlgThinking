@@ -269,3 +269,37 @@
 #+end_src
 
 #+RESULTS:
+*** A Completely different solution (Using Recursive) 
+#+begin_src C
+  // Import needed structure/functions from previous code blocks
+  typedef struct node{
+    int candy;
+    struct node *left, *right;
+  } node;
+
+
+  //Implement Rule 1 and Rule 2 of the recursive definition for this problem 
+  int tree_candy(node *tree){
+    if(!tree->left && !tree->right){
+      return tree->candy;
+    }
+    return tree_candy(tree->left) + tree_candy(tree->right);
+  } 
+
+  // Practicing Recursion
+  int tree_nodes(node *tree){
+    if(!tree->left && !tree->right){
+      return 1;
+    }
+    return 1 + tree_nodes(tree->left) + tree_nodes(tree->right);
+  }
+
+int tree_leaves(node *tree){
+if(!tree->left && !tree->right){
+return 1;
+}
+return tree_leaves(tree->left) + tree_leaves(tree->right);
+}
+#+end_src
+
+#+RESULTS:
