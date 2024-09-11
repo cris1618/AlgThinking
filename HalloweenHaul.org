@@ -269,6 +269,7 @@
 #+end_src
 
 #+RESULTS:
+
 *** A Completely different solution (Using Recursive) 
 #+begin_src C
   // Import needed structure/functions from previous code blocks
@@ -300,6 +301,56 @@ return 1;
 }
 return tree_leaves(tree->left) + tree_leaves(tree->right);
 }
+#+end_src
+
+#+RESULTS:
+
+** Walking the Minimum Number of Streets
+#+begin_src C
+  typedef struct node{
+    int candy;
+    struct node *left, *right;
+  } node;
+
+  // Using recursive function
+  int tree_streets(node *tree){
+    if(!tree->left && !tree->right){
+      return 0;
+    }
+    return 4 + tree_streets(tree->left) + tree_streets(tree->right);
+  }
+
+  int tree_candy(node *tree){
+    if(!tree->left && !tree->right){
+      return tree->candy;
+    }
+    return tree_candy(tree->left) + tree_candy(tree->right);
+  } 
+
+  // Calculating tree height
+  int max(int x, int y){
+    if(x>y){
+      return x;
+    }else{
+      return y;
+    }
+  }
+
+  int tree_height(node *tree){
+    if(!tree->left && !tree->right){
+      return 0;
+    }
+    return max(tree_height(tree->left), tree_height(tree->right)) + 1;
+  }
+
+
+  // Function to solve the final problem
+  void tree_solve(node *tree){
+    int candy = tree_candy(tree);
+    int height = tree_height(tree);
+    int num_streets = tree_streets(tree) - height;
+    ptintf("%d %d\n", num_streets, candy);
+  }
 #+end_src
 
 #+RESULTS:
