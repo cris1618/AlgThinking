@@ -266,7 +266,7 @@
     return total;
   }
 
-#+end_src
+  #+end_src
 
 #+RESULTS:
 
@@ -295,12 +295,12 @@
     return 1 + tree_nodes(tree->left) + tree_nodes(tree->right);
   }
 
-int tree_leaves(node *tree){
-if(!tree->left && !tree->right){
-return 1;
-}
-return tree_leaves(tree->left) + tree_leaves(tree->right);
-}
+  int tree_leaves(node *tree){
+    if(!tree->left && !tree->right){
+      return 1;
+    }
+    return tree_leaves(tree->left) + tree_leaves(tree->right);
+  }
 #+end_src
 
 #+RESULTS:
@@ -351,6 +351,49 @@ return tree_leaves(tree->left) + tree_leaves(tree->right);
     int num_streets = tree_streets(tree) - height;
     ptintf("%d %d\n", num_streets, candy);
   }
+#+end_src
+
+#+RESULTS:
+** Reading the input
+**** Representing a Tree as a string
+#+begin_src C
+  typedef struct node{
+    int candy;
+    struct node *left, *right;
+  } node;
+
+  node *read_tree(char *line){
+    int pos = 0; 
+    return read_tree_helper(line, &pos);
+
+  }
+
+  node *tree;
+  tree = malloc(sizeof(node));
+  if(line[*pos] == '('){
+    (*pos)++;
+    tree->left = read_tree_helper(line, pos);
+    (*pos)++;
+    tree->right = read_tree_helper(line, pos);
+    (*pos)++;
+    return tree;
+   }
+
+  // Reading in an House Node
+  #define SIZE 255
+
+  int main(){
+    char line[SIZE +1];
+    int candy;
+    gets(line);
+    candy = line[0] - '0';
+    printf("%d\n", candy);
+    return 0;
+  }
+
+// String with two digits
+// This main function is only reprsentative (The code won't work)
+
 #+end_src
 
 #+RESULTS:
