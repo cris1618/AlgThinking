@@ -354,6 +354,7 @@
 #+end_src
 
 #+RESULTS:
+
 ** Reading the input And solving the problem
 **** Representing a Tree as a string
 #+begin_src C
