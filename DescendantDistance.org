@@ -4,4 +4,26 @@
 #+STARTUP: overview hideblocks indent
 #+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
 
+** Reading the Input
+#+begin_src C
+  // Create new node for non-binary trees
+  typedef struct node{
+    int num_children;
+    struct node **children; //Array to store the tree's childrens
+      char *name;
+    int score;
+  } node;
 
+  // Finding a node
+  node *find_node(node *nodes[], int num_nodes, char *name){
+    int i;
+    for(i=0; i<num_nodes; i++){
+      if(strcmp(nodes[i]->name, name) == 0){
+        return nodes[i];
+      }
+    }
+    return NULL;
+  }
+#+end_src
+
+#+RESULTS:
