@@ -87,6 +87,7 @@
 #+end_src
 
 #+RESULTS:
+
 * Number of Descendants from one Node
 #+begin_src C
   typedef struct node{
@@ -113,6 +114,7 @@
 #+end_src
 
 #+RESULTS:
+
 
 * Number of Descendants from all Nodes
 #+begin_src C
@@ -176,6 +178,7 @@
 #+end_src
 
 #+RESULTS:
+
 * The Main function and problem solution 
 #+begin_src C 
   // Import all previous functions
