@@ -4,15 +4,25 @@
 #+STARTUP: overview hideblocks indent
 #+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
 
-* Try a Recursive Approach
-#+begin_src C
+** Solution 1: Recursion
+#+begin_src bash
+echo "4 9 20" > burger
+cat burger 
+
+#+end_src
+
+#+RESULTS:
+: 4 9 20
+
+#+begin_src C :cmdline < burger :tangle burg.c
   int max(int v1, int v2){
     if(v1 > v2){
       return v1;
     }else{
       return v2;
     }
-  
+  }
+
   // Create helper function to solve for the numbers of minutes
   int solve_t(int m, int n, int t){
     if(t==0){
@@ -45,14 +55,185 @@
       printf("%d\n", result);
     }else{
       i = t-1;
-      result = solve_t(m, n, i);
-      while(result == -1){
+      result = solve_t(m, n, i);   
+      while(result == -1 && i >= 0){
         i--;
         result = solve_t(m, n, i);
       }
+      printf("%d %d\n", result, t-i);
     }
-    printf("%d %d\n", result, t-i);
+
   }
+
+
+
+  // The main function
+  int main(void){
+    int m, n, t;
+    while(scanf("%d%d%d", &m, &n, &t) != -1){
+      solve(m,n,t);
+    }
+    return 0;
+  }
+#+end_src
+
+#+RESULTS:
+: 44
+
+#+begin_src bash :results output
+gcc burg.c -o burg
+echo "4 9 22" | ./burg
+#+end_src
+
+#+RESULTS:
+: 3
+
+*** Showing the inefficency of the recursive approach
+
+#+begin_src bash
+echo "4 2 88" > burger
+cat burger 
+#+end_src
+
+#+RESULTS:
+: 4 2 88
+
+#+begin_src C :cmdline < burger
+  int max(int v1, int v2){
+    if(v1 > v2){
+      return v1;
+    }else{
+      return v2;
+    }
+  }
+  // Initialize variable to count total number of recursive calls
+  unsigned long long total_calls;
+
+  // Create helper function to solve for the numbers of minutes
+  int solve_t(int m, int n, int t){
+    total_calls++;   
+    if(t==0){
+      return 0;
+    }
+    int first; 
+    if(t>=m){
+      first = solve_t(m, n, t-m);
+    }else{
+      first = -1;
+    }
+    int second;
+    if(t>=n){
+      second = solve_t(m, n, t-n);
+    }else{
+      second = -1;
+    }
+    if(first == -1 && second == -1){
+      return -1;
+    }else{
+      return max(first, second) + 1;
+    }
+  }
+
+  // General function to solve for t-1, t-2 and so on
+  void solve(int m, int n, int t){
+    int result, i;
+    total_calls = 0;
+    result = solve_t(m,n,t);
+    if(result>=0){
+      printf("%d\n", result);
+    }else{
+      i = t-1;
+      result = solve_t(m, n, i);
+      while(result == -1 && i >= 0){
+        i--;
+        result = solve_t(m, n, i);
+      }
+      printf("%d %d\n", result, t-i);
+    }
+    printf("Total calls to solve_t: %llu\n", total_calls);
+  }
+
+  
+
+  // The main function
+  int main(void){
+    int m, n, t;
+    while(scanf("%d%d%d", &m, &n, &t) != -1){
+      solve(m,n,t);
+    }
+    return 0;
+  }
+
+
+#+end_src
+
+#+RESULTS:
+: 44
+: Total calls to solve_t: 2971215072
+
+** Solution 2: Memoization
+#+begin_src C
+  #define SIZE 10000
+
+  // Import functions again
+  int max(int v1, int v2){
+    if(v1 > v2){
+      return v1;
+    }else{
+      return v2;
+    }
+  }
+
+  // Create helper function to solve for the numbers of minutes
+  int solve_t(int m, int n, int t, int memo[]){
+    if(memo[t] != -2){
+      return memo[t];
+    }   
+    if(t==0){
+      memo[t] = 0;
+      return memo[t];
+    }
+    int first; 
+    if(t>=m){
+      first = solve_t(m, n, t-m, memo);
+    }else{
+      first = -1;
+    }
+    int second;
+    if(t>=n){
+      second = solve_t(m, n, t-n, memo);
+    }else{
+      second = -1;
+    }
+    if(first == -1 && second == -1){
+      memo[t] = -1;
+      return memo[t];
+    }else{
+      memo[t] = max(first, second) +1;
+      return memo[t];
+    }
+  }
+
+  // General function to solve for t-1, t-2 and so on
+  // Initializ memo inside the function
+  void solve(int m, int n, int t){
+    int result, i;
+    int memo[SIZE];
+    for(i = 0; i<=t; i++){
+      memo[i] = -2;
+    }
+    result = solve_t(m,n,t, memo);
+    if(result>=0){
+      printf("%d\n", result);
+    }else{
+      i = t-1;
+      result = solve_t(m, n, i, memo);   
+      while(result == -1){
+        i--;
+        result = solve_t(m, n, i, memo);
+      }
+      printf("%d %d\n", result, t-i);
+    }
 
   }
 
