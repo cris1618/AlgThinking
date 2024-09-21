@@ -1,0 +1,10 @@
+#+TITLE: Moneygrubbers
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
+
+** Solution 1: Recursion
+   #+begin_src C
+   
+   #+end_src
