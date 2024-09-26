@@ -54,6 +54,7 @@
 
 #+RESULTS:
 : 0
+
 ** Solution 2: Memoization
 #+begin_src C
 #define SIZE 1000
