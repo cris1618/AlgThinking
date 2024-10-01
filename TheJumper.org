@@ -1,85 +1,142 @@
-#+TITLE: Burger Fervor
+#+TITLE: The Jumper
 #+AUTHOR: Cristian Del Gobbo (pledged)
 #+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
 #+STARTUP: overview hideblocks indent
 #+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
 
 ** Solution 1: Backward Formulation
-   #+begin_src C :results output
-     #define SIZE 1000
-     #include<stdio.h>
+#+begin_src C :results output
+  #define SIZE 1000
+  #include<stdio.h>
 
-     int min(int x, int y){
-       if(x<y)
-	 return x;
-       else
-	 return y;
-     }
-   
-     int solve_ij(int cost[], int n, int i, int j, int memo[SIZE+1][SIZE+1]){
-       int first, second;
-       if(memo[i][j] != -2)
-	 return memo[i][j];
-       if(i == 2 && j == 1){
-	 memo[i][j] = 0;
-	 return memo[i][j];
-       }
-       if(i-j>=1 && j>=2)
-	 first = solve_ij(cost, n, i-j, j-1, memo);
-       else
-	 first = -1;
-       if(i+j<=n)
-	 second = solve_ij(cost, n, i+j, j, memo);
-       else
-	 second = -1;
-       if(first == -1 && second == -1){
-	 memo[i][j] = -1;
-	 return memo[i][j];
-       } else if (second == -1){
-	 memo[i][j] = first + cost[i];
-	 return memo[i][j];
-       }else if(first == -1){
-	 memo[i][j] = second + cost[i];
-	 return memo[i][j];
-       }else{
-	 memo[i][j] = min(first, second) + cost[i];
-	 return memo[i][j];
-       }
+  int min(int x, int y){
+    if(x<y)
+      return x;
+    else
+      return y;
+  }
 
-     }
+  int solve_ij(int cost[], int n, int i, int j, int memo[SIZE+1][SIZE+1]){
+    int first, second;
+    if(memo[i][j] != -2)
+      return memo[i][j];
+    if(i == 2 && j == 1){
+      memo[i][j] = 0;
+      return memo[i][j];
+    }
+    if(i-j>=1 && j>=2)
+      first = solve_ij(cost, n, i-j, j-1, memo);
+    else
+      first = -1;
+    if(i+j<=n)
+      second = solve_ij(cost, n, i+j, j, memo);
+    else
+      second = -1;
+    if(first == -1 && second == -1){
+      memo[i][j] = -1;
+      return memo[i][j];
+    } else if (second == -1){
+      memo[i][j] = first + cost[i];
+      return memo[i][j];
+    }else if(first == -1){
+      memo[i][j] = second + cost[i];
+      return memo[i][j];
+    }else{
+      memo[i][j] = min(first, second) + cost[i];
+      return memo[i][j];
+    }
 
-     int solve(int cost[], int n){
-       int i, j, best, result;
-       static int memo[SIZE+1][SIZE+1];
-       for(i=1; i<=SIZE; i++){
-	 for(j=1; j<=SIZE; j++){
-	   memo[i][j] = -2;
-	 }
-       }
-       best = -1;
-       for(j=1; j<=n; j++){
-	 result = solve_ij(cost, n, n, j, memo);
-	 if(result != -1){
-	   if(best==-1)
-	     best = cost[2] + result;
-	   else
-	     best = min(best, cost[2]+result);
-	 }
-       }
-       return best;
-     }
+  }
 
-     // The Main Function
-     int main(){
-       int i, n;
-       int cost[SIZE+1];
-       scanf("%d ", &n);
-       for(i=1; i<=n; i++)
-	 scanf("%d", &cost[i]);
-       printf("%d\n", solve(cost, n));
-       return 0;
-     }
-   #+end_src
+  int solve(int cost[], int n){
+    int i, j, best, result;
+    static int memo[SIZE+1][SIZE+1];
+    for(i=1; i<=SIZE; i++){
+      for(j=1; j<=SIZE; j++){
+        memo[i][j] = -2;
+      }
+    }
+    best = -1;
+    for(j=1; j<=n; j++){
+      result = solve_ij(cost, n, n, j, memo);
+      if(result != -1){
+        if(best==-1)
+          best = cost[2] + result;
+        else
+          best = min(best, cost[2]+result);
+      }
+    }
+    return best;
+  }
 
-   #+RESULTS:
-   : 0
+  // The Main Function
+  int main(){
+    int i, n;
+    int cost[SIZE+1];
+    scanf("%d ", &n);
+    for(i=1; i<=n; i++)
+      scanf("%d", &cost[i]);
+    printf("%d\n", solve(cost, n));
+    return 0;
+  }
+#+end_src
+
+#+RESULTS:
+: 0
+** Solution 2: Forward Solution
+#+begin_src C :results output
+  #define SIZE 1000
+
+  int min(int x, int y){
+    if(x<y)
+      return x;
+    else y;
+  }
+
+  int solve(int cost[], int n, int i, int j, int memo[SIZE + 1][SIZE + 1]){
+    int first, second;
+    if(memo[i][j] != -2)
+      return memo[i][j];
+    if(i==n){
+      memo[i][j] = 0;
+      return memo[i][j];
+    }
+    if(i+j+1 <= n)
+      first = solve(cost, n, i + j + 1, j + 1, memo);
+    else
+      first = -1;
+    if(i-j >= 1)
+      second = solve(cost, n, i-j, j, memo);
+    else
+      second = -1; 
+    if(first == -1 && second == -1){
+      memo[i][j] = -1;
+      return memo[i][j];
+    } else if(second == -1){
+      memo[i][j] = cost[i+j+1] + first;
+      return memo[i][j];
+    } else if(first == -1){
+      memo[i][j] = cost[i-j] + second;
+      return memo[i][j];
+    }else{
+      memo[i][j] = min(cost[i+j+1] + first, cost[i-j] + second);
+      return memo[i][j];
+    }
+  }
+
+  // Main function
+  int main(){
+    int i, j, n, results;
+    int cost[SIZE + 1];
+    static int memo[SIZE + 1][SIZE + 1];
+    scanf("%d ", &n);
+    for(i=1; i<=SIZE; i++)
+      for(j=1; j<=SIZE; j++)
+        memo[i][j] = -2;
+    results = cost[2] + solve(cost, n, 2, 1, memo);
+    printf("%d\n", results);
+    return 0; 
+  }
+#+end_src
+
+#+RESULTS:
