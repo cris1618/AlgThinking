@@ -1,0 +1,40 @@
+#+TITLE: Ways To Build
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
+
+** Solution 1: Using "Exactly" Subproblems
+   #+begin_src C :results output
+     #define MAX_A 1000
+     #define MAX_B 200
+     #define MAX_K 200
+     #define MOD 1000000007
+
+     int solve_ijk(char a[], char b[], int i, int j, int k, int memo[MAX_A][MAX_B][MAX_K+1]){
+       int total, q;
+       if(memo[i][j][k] != -1)
+	 return memo[i][j][k];
+       if(j==0 && k==1 && a[i] == b[j]){
+	 memo[i][j][k] = 1;
+	 return memo[i][j][k];
+       }
+       if(i==0 || j==0 || k==0){
+	 memo[i][j][k] = 0;
+	 return memo[i][j][k];
+       }
+       if(a[i] != b[j]){
+	 memo[i][j][k] = 0;
+	 return memo[i][j][k];
+       }
+       total = 0;
+       for(q = 0; q<i; q++)
+	 total = (total + solve_ijk(a, b, q, j-1, k-1, memo))%MOD;
+       total = (total + solve_ijk(a, b, i-1, j-1, k, memo))%MOD;
+       memo[i][j][k] = total;
+       return memo[i][j][k];
+     }
+   
+   #+end_src
+
+   #+RESULTS:
