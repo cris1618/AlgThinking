@@ -1,0 +1,41 @@
+#+TITLE: Book Translation
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main no :includes <stdio.h> :results output
+
+* Solution 
+  #+begin_src C :results output
+    #include <stdlib.h>
+    #include <stdio.h>
+    // Helping function to read words
+    char* read_word(int size){
+      char* str;
+      int ch;
+      int len = 0;
+      str = malloc(size);
+      if(str==NULL){
+	fprintf(stderr, "malloc error\n");
+	exit(1);
+      }
+      while((ch=getchar()) != EOF && (ch != ' ') && (ch != '\n')){
+	str[len++] = ch;
+	if(len == size){
+	  size = size * 2;
+	  str = realloc(str, size);
+	  if(str==NULL){
+	    fprintf(stderr, "realloc error\n");
+	    exit(1);
+	  }
+	}
+      }
+      str[len] = '\0';
+      return str;
+    }
+
+    int main(){
+      return 0;
+    }
+  #+end_src
+
+  #+RESULTS:
