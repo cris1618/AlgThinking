@@ -5,37 +5,97 @@
 #+PROPERTY: header-args:C :main no :includes <stdio.h> :results output
 
 * Solution 
-  #+begin_src C :results output
-    #include <stdlib.h>
-    #include <stdio.h>
-    // Helping function to read words
-    char* read_word(int size){
-      char* str;
-      int ch;
-      int len = 0;
-      str = malloc(size);
-      if(str==NULL){
-	fprintf(stderr, "malloc error\n");
-	exit(1);
-      }
-      while((ch=getchar()) != EOF && (ch != ' ') && (ch != '\n')){
-	str[len++] = ch;
-	if(len == size){
-	  size = size * 2;
-	  str = realloc(str, size);
-	  if(str==NULL){
-	    fprintf(stderr, "realloc error\n");
-	    exit(1);
-	  }
-	}
-      }
-      str[len] = '\0';
-      return str;
-    }
+#+begin_src C :results output
+  #include <stdlib.h>
+  #include <stdio.h>
 
-    int main(){
-      return 0;
+  #define MAX_LANGS 101
+  #define WORD_LENGTH 16
+
+  typedef struct edge{
+    int to_lang, cost;
+    struct edge *next;
+  }edge;
+
+  typedef int board[MAX_LANGS];
+  typedef int positions[MAX_LANGS];
+
+  // Helping function to read words
+  char* read_word(int size){
+    char* str;
+    int ch;
+    int len = 0;
+    str = malloc(size);
+    if(str==NULL){
+      fprintf(stderr, "malloc error\n");
+      exit(1);
     }
+    while((ch=getchar()) != EOF && (ch != ' ') && (ch != '\n')){
+      str[len++] = ch;
+      if(len == size){
+        size = size * 2;
+        str = realloc(str, size);
+        if(str==NULL){
+          fprintf(stderr, "realloc error\n");
+          exit(1);
+        }
+      }
+    }
+    str[len] = '\0';
+    return str;
+  }
+
+  int find_lang(char* langs[], char* lang){
+    int i = 0;
+    while(strcmp(langs[i], lang) != 0)
+      i++;
+    return i;
+  }
+
+  int main(){
+    static edge* adj_list[MAX_LANGS] = {NULL};
+    static char* lang_names[MAX_LANGS];
+    int i, num_targets, num_translators, cost, from_index, to_index;
+
+    char* from_lang;
+    char* to_lang;
+    edge* e;
+    static board min_costs;
+    scanf("%d%d ", &num_targets, &num_translators);
+    lang_names[0] = "English";
+
+    for(i=0; i<=num_targets; i++)
+      lang_names[i] = read_word(WORD_LENGTH);
+
+    for(i=0; i<num_translators; i++){
+      from_lang = read_word(WORD_LENGTH);
+      to_lang = read_word(WORD_LENGTH);
+      scanf("%d", &cost);
+      from_index = find_lang(lang_names, from_lang);
+      to_index = find_lang(lang_names, to_lang);
+      e = malloc(sizeof(edge));
+      if(e == NULL){
+        fprintf(stderr, "malloc error\n");
+        exit(1);
+      }
+      e->to_lang = to_index;
+      e->cost = cost;
+      e->next = adj_list[from_index];
+      adj_list[from_index] = e;
+      e = malloc(sizeof(edge));
+      if(e==NULL){
+        fprintf(stderr, "malloc error\n");
+        exit(1);
+      }
+      e->to_lang = from_index;
+      e->cost = cost;
+      e->next = adj_list[to_index];
+      adj_list[to_index] = e;
+    }
+    find_distances(adj_list, num_targets+1, min_costs);
+    solve(num_targets + 1, min_costs);
+    return 0;
+  }
   #+end_src
 
   #+RESULTS:
