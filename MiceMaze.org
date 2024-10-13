@@ -100,7 +100,7 @@
 
 #+RESULTS:
 
-* Optimizes Result
+* Optimized Result
 #+begin_src C :results output
 #include <stdio.h>
 #include <stdlib.h>
