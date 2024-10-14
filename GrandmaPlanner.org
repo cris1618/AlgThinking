@@ -1,0 +1,52 @@
+#+TITLE: Grandma Planner
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> :results output
+
+* Solution 1
+#+begin_src C :results output
+#include <stdlib.h>
+#include <stdio.h>
+  #define MAX_TOWNS 700
+
+  typedef struct edge{
+    int to_town, length;
+    struct edge* next;
+  }edge;
+
+  // The main function
+  int main(){
+    static edge* adj_list[MAX_TOWNS + 1] = {NULL};
+    int i, num_towns, from_town, to_town, length;
+    int num_stores, store_num;
+    static int store[MAX_TOWNS + 1] = {0};
+    edge* e;
+
+    scanf("%d", &num_towns);
+    for(from_town = 1; from_town <= num_towns; from_town++)
+      for(to_town = 1; to_town <= num_towns; to_town++){
+        scanf("%d", &length);
+        if(from_town != to_town){
+          e = malloc(sizeof(edge));
+          if(e == NULL){
+            fprintf(stderr, "malloc error\n");
+            exit(1);
+          }
+          e->to_town = to_town;
+          e->length = length;
+          e->next = adj_list[from_town];
+          adj_list[from_town] = e;
+        }
+      }
+    scanf("%d", &num_stores);
+    for(i=1; i <= num_stores; i++){
+      scanf("%d", &store_num);
+      store[store_num] = 1;
+    }
+    solve(adj_list, num_towns, store);
+    return 0;
+  }
+#+end_src
+
+#+RESULTS:
