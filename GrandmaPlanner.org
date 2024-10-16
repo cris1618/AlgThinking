@@ -6,14 +6,64 @@
 
 * Solution 1
 #+begin_src C :results output
-#include <stdlib.h>
-#include <stdio.h>
+  #include <stdlib.h>
+  #include <stdio.h>
   #define MAX_TOWNS 700
 
   typedef struct edge{
     int to_town, length;
     struct edge* next;
   }edge;
+
+  // Find the shortest path
+  void solve(edge* adj_list[], int num_towns, int store[]){
+    static int done[MAX_TOWNS + 1][2];
+    static int min_distances[MAX_TOWNS + 1][2];
+    int i , j, state, found;
+    int min_distance, min_town_index, min_state_index, old_distance;
+    edge* e;
+
+    for(state=0; state<=1; state++)
+      for(i=0; i<num_towns; i++){
+        done[i][state] = 0;
+        min_distances[i][state] = -1;
+      }
+    min_distances[1][0] = 0;
+
+    for(i=0; i<num_towns*2; i++){
+      min_distance = -1;
+      found = 0;
+      for(state=0; state<=1; state++)
+        for(j=0; j<=num_towns; j++){
+          if(!done[j][state] && min_distances[j][state] >= 0){
+            if(min_distance == -1 || min_distances[j][state] < min_distance){
+              min_distance = min_distances[j][state];
+              min_town_index = j;
+              min_state_index = state; 
+              found = 1;
+            }
+          }
+        }
+      if(!found)
+        break;
+      done[min_town_index][min_state_index] = 1;
+
+      if(min_state_index == 0 && store[min_town_index]){
+        old_distance = min_distances[min_town_index][1];
+        if(old_distance == -1 || old_distance > min_distance)
+          min_distances[min_town_index][1] = min_distance;
+      }else{
+        e = adj_list[min_town_index];
+        while(e){
+          old_distance = min_distances[e->to_town][min_state_index];
+          if(old_distance == -1 || old_distance > min_distance + e->length)
+            min_distances[e->to_town][min_state_index] = min_distance + e->length;
+          e = e->next;
+        }
+      }
+    }
+    printf("%d\n", min_distances[num_towns][1]);
+  }
 
   // The main function
   int main(){
@@ -50,3 +100,4 @@
 #+end_src
 
 #+RESULTS:
+: 0
