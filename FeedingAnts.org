@@ -28,6 +28,7 @@
 
 #+begin_src C :cmdline < fa
   #define MAX_NODES 1000
+  #define HIGHEST 2000000000
 
   typedef struct edge{
     int to_node, percentage, superpipe;
@@ -54,6 +55,20 @@
     }
     return ok;
   } 
+
+  void solve(edge* adj_list[], int liquid_needed[]){
+    double low, high, mid;
+    low = 0;
+    high = HIGHEST;
+    while(high-low > 0.00001){
+      mid = (low+high)/2;
+      if(can_feed(1, mid, adj_list, liquid_needed))
+        high = mid;
+      else 
+        low = mid;
+    }
+    printf("%.4lf\n", high);
+  }
 
   int main(){
     static edge* adj_list[MAX_NODES + 1] = {NULL};
@@ -88,3 +103,4 @@
 #+end_src
 
 #+RESULTS:
+: 18.0
