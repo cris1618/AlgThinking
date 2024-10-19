@@ -1,0 +1,10 @@
+#+TITLE: Living Quality
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> <stdlib.h> :results output :noweb yes
+
+* Solution
+#+begin_src C
+
+#+end_src
