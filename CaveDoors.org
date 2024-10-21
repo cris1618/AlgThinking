@@ -1,0 +1,31 @@
+#+TITLE: Cave Doors
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> <stdlib.h> :results output :noweb yes
+
+* Solving Subtasks
+First Subtask: Solve the problem when each switch =i=
+is associated with door number =i=.
+
+#+name: sub_1
+#+begin_src C
+  void exploreCave(int n){
+    int switch_positions[n], door_for_switch[n];
+    int i, result;
+    for(i=0; i<n; i++){
+      switch_positions[i] = 0;
+      door_for_switch[i] = i;
+    }
+
+    for(i=0; i<n; i++){
+      result = tryCombination(switch_positions));
+    if(result == i) // door i is closed
+      switch_positions[i] = 1;
+  }
+  answer(switch_positions, door_for_switch);
+  }
+
+#+end_src
+
+#+RESULTS: sub_1
