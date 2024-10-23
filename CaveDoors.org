@@ -77,4 +77,43 @@ Now let's generalize the solution.
 
 #+end_src
 
+Using Binary Search
+#+name: Binary_search
+#+begin_src C
+  void set_a_switch(int door, int switch_positions[], int door_for_switch[], int n){
+    int i, result;
+    int low = 0, high = n-1, mid;
+
+    for(i=0; i<n; i++){
+      if(door_for_switch[i] == -1)
+        switch_positions[i] = 0;
+
+      result = tryCombination(switch_positions);
+      if(result != door){
+        for(i=0; i<n; i++)
+          if(door_for_switch[i] == -1)
+            switch_positions[i] = 1;
+      }
+
+      while(low != high){
+        mid = (low + high) / 2;
+        for(i=low; i<=mid; i++)
+          if(door_for_switch[i] == -1)
+            switch_postions[i] = 1 - switch_postions[i];
+        result = tryCombination(switch_positions);
+        if(result != door){
+          high = mid;
+          for(i=low; i<=mid; i++)
+            if(door_for_switch[i] == -1)
+              switch_postions[i] = 1 - switch_postions[i];
+        }
+        else
+          low = mid + 1;
+      }
+      door_for_switch[low] = door;
+      switch_positions[low] = 1 - switch_postions[low];
+    }
+
+#+end_src
+
 #+RESULTS: sub_2
