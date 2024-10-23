@@ -1,0 +1,55 @@
+#+TITLE: Supermarket Promotion
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> <stdlib.h> :results output :noweb yes
+
+* Solution 1: Max and Min in an arrays
+#+begin_src bash :results output
+  echo "2" > recarr
+  echo "16 6 63 16 82 25 2 43 5 17 10 56 85 38 15 32 91" >> recarr
+  echo "1 57" >> recarr
+  cat recarr
+#+end_src
+
+#+RESULTS:
+: 2
+: 16 6 63 16 82 25 2 43 5 17 10 56 85 38 15 32 91
+: 1 57
+
+#+begin_src C
+  #define MAX_RECEIPTS 1000000
+  #define MAX_COST 1000000
+
+  typedef struct receipt{
+    int cost;
+    int used;
+  } receipt;
+
+  int extract_max(receipt receipts[], int num_receipts){
+    int max, max_index, i;
+    max = -1;
+    for(i=0; i<num_receipts; i++)
+      if(!receipts[i].used && receipts[i].cost > max){
+        max_index = i;
+        max = receipts[i].cost;
+      }
+    receipts[max_index].used = 1;
+    return max;
+  }
+
+  int extract_min(receipt receipts[], int num_receipts){
+    int min, min_index, i;
+    min = MAX_COST + 1;
+    for(i=0; i<num_receipts; i++)
+      if(!receipts[i].used && receipts[i].cost < min){
+        min_index = i;
+        min = receipts[i].cost;
+      }
+    receipts[min_index].used = 1;
+    return min;
+  }
+
+#+end_src
+
+#+RESULTS:
