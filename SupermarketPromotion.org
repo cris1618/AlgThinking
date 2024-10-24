@@ -17,7 +17,7 @@
 : 16 6 63 16 82 25 2 43 5 17 10 56 85 38 15 32 91
 : 1 57
 
-#+begin_src C
+#+begin_src C :cmdline < recarr
   #define MAX_RECEIPTS 1000000
   #define MAX_COST 1000000
 
@@ -50,6 +50,53 @@
     return min;
   }
 
+  int main(){
+    static struct receipt receipts[MAX_RECEIPTS];
+    int num_days, num_receipts_today;
+    int num_receipts = 0;
+    long long total_prizes = 0;
+    int i, j, max, min;
+    scanf("%d", &num_days);
+    for(i=0; i<num_days; i++){
+      scanf("%d", &num_receipts_today);
+      for(j=0; j<num_receipts_today; j++){
+        scanf("%d", &receipts[num_receipts].cost);
+        receipts[num_receipts].used = 0;
+        num_receipts++;
+      }
+      max = extract_max(receipts, num_receipts);
+      min = extract_min(receipts, num_receipts);
+      total_prizes += max-min;
+    }
+    printf("%lld\n", total_prizes);
+    return 0;
+  }
+
+#+end_src
+
+#+RESULTS:
+: 169
+
+** Implementing a Max-Heap
+#+begin_src C
+  typedef struct heap_element{
+    int receipt_index;
+    int cost;
+  }heap_element;
+
+  void max_heap_insert(heap_element heap[], int* num_heap, int receipt_index, int cost){
+    int i;
+    heap_element temp;
+    (*num_heap)++;
+    heap[*num_heap] = (heap_element){receipt_index, cost};
+    i = *num_heap;
+    while(i > 1 && heap[i].cost > heap[i/2].cost){
+      temp = heap[i];
+      heap[i] = heap[i/2];
+      heap[i/2] = temp;
+      i = i/2;
+    }
+  }
 #+end_src
 
 #+RESULTS:
