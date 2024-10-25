@@ -97,6 +97,30 @@
       i = i/2;
     }
   }
+
+  // Extract from max-heap
+  heap_element max_heap_extract(heap_element heap[], int* num_heap){
+    heap_element remove, temp;
+    int i, child;
+
+    remove = heap[1];
+    heap[1] = heap[*num_heap];
+    (*num_heap)--;
+    i = 1;
+    while(i*2 <= *num_heap){
+      child = i*2;
+      if(child < *num_heap && heap[child + 1].cost > heap[child].cost)
+        child++;
+      if(heap[child].cost > heap[i].cost){
+        temp = heap[i];
+        heap[i] = heap[child];
+        heap[child] = temp;
+        i = child;
+      } else
+        break;
+    }
+    return remove;
+  }
 #+end_src
 
 #+RESULTS:
