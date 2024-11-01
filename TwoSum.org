@@ -4,4 +4,46 @@
 #+STARTUP: overview hideblocks indent
 #+PROPERTY: header-args:C :main yes :includes <stdio.h> <stdlib.h> <string.h> :results output :noweb yes
 
+* Solution
+#+begin_src C
+  typedef struct segtree_node{
+    int left, right;
+    int max_sum, max_element;
+  } segtree_node;
 
+  typedef struct node_info{
+    int max_sum, max_element;
+  } node_info;
+
+  int max(int v1, int v2){
+    if(v1 > v2)
+      return v1;
+    else
+      return v2;
+  }
+
+  node_info fill_segtree(segtree_node segtree[], int node, int seq[]){
+    node_info left_info, right_info;
+
+    if(segtree[node].left == segtree[node].right){
+      segtree[node].max_sum = -1;
+      segtree[node].max_element = seq[segtree[node].left];
+      return (node_info){segtree[node].max_sum, segtree[node].max_element};
+    }
+
+    left_info = fill_segtree(segtree, node * 2, seq);
+    right_info = fill_segtree(segtree, node * 2 + 1, seq);
+
+    segtree[node].max_element = max(left_info.max_element, right_info.max_element);
+
+    if(left_info.max_sum == -1 && right_info.max_sum == -1)
+      segtree[node].max_sum = left_info.max_element + right_info.max_element; 
+    else if(left_info.max_sum == -1)
+      segtree[node].max_sum = max(left_info.max_element + right_info.max_element, right_info.max_sum);
+    else
+      segtree[node].max_sum = max(left_info.max_element + right_info.max_element, max(left_info.max_sum, right_info.max_sum));
+    return (node_info){segtree[node].max_sum, segtree[node].max_element};
+  }
+#+end_src
+
+#+RESULTS:
