@@ -152,3 +152,78 @@ S 4
 #+end_src
 
 #+RESULTS:
+* Solution 2: Union-Find
+#+begin_src C
+  #define MAX_PEOPLE 100000
+
+  // Array based. TIME LIMIT
+  int find1(int person, int community_of[]){
+    return community_of[person];
+  }
+
+  
+  void union_communities1(int person1, int person2, int community_of[], int num_people){
+    int community1, community2, i;
+    community1 = find1(person1, community_of);
+    community2 = find1(person2, community_of);
+    for(i=1; i<=num_people; i++)
+      if(community_of[i] == community1)
+        community_of[i] = community2;
+  } 
+
+  // Tree based solution
+  int find2(int person, int parent[]){
+    int community = person;
+    while(parent[community] != community)
+      community = parent[community];
+    return community;
+  }
+
+  void union_communities2(int person1, int person2, int parent[], int size[], int num_community){
+    int community1, community2;
+    community1 = find2(person1, parent);
+    community2 = find2(person2, parent);
+    if(community1 != community2 && size[community1] + size[community2] <= num_community){
+      parent[community1] = community2;
+      size[community2] = size[community1] + size[community2];
+    }
+  }
+
+  // The main function
+  int main(){
+    static int parent[MAX_PEOPLE + 1], size[MAX_PEOPLE + 1];
+    int num_people, num_community, num_ops, i;
+    char op;
+    int person1, person2;
+    scanf("%d%d", &num_people, &num_community);
+    for(i=1; i<= num_people; i++){
+      parent[i] = i;
+      size[i] = 1;
+    }
+    scanf("%d", &num_ops);
+
+    for(i=0; i<num_ops; i++){
+      scanf(" %c", &op);
+
+      if(op == 'A'){
+        scanf("%d%d", &person1, &person2);
+        union_communities2(person1, person2, parent, size, num_community);
+      }
+
+      else if(op == 'E'){
+        scanf("%d%d", &person1, &person2);
+        if(find2(person1, parent) == find2(person2, parent))
+          printf("Yes\n");
+        else
+          printf("No\n");
+      }
+      else{
+        scanf("%d", &person1);
+        printf("%d\n", size[find2(person1, parent)]);
+      }
+    }
+    return 0;
+  }
+#+end_src
+
+#+RESULTS:
