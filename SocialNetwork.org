@@ -153,6 +153,7 @@ S 4
 
 #+RESULTS:
 * Solution 2: Union-Find
+#+name: union_find
 #+begin_src C
   #define MAX_PEOPLE 100000
 
@@ -161,7 +162,7 @@ S 4
     return community_of[person];
   }
 
-  
+
   void union_communities1(int person1, int person2, int community_of[], int num_people){
     int community1, community2, i;
     community1 = find1(person1, community_of);
@@ -227,3 +228,28 @@ S 4
 #+end_src
 
 #+RESULTS:
+** Optimization 1: Union by Size
+#+begin_src C
+  <<uion_find>>
+
+
+
+#+end_src
+
+#+RESULTS:
+** Optimization 2: Path Compression
+#+begin_src C
+  <<union_find>>
+  int find(int person, int parent[]){
+    int community = person, temp;
+    while(parent[community] != community)
+      community = parent[community];
+    while(parent[person] != community){
+      temp = parent[person];
+      parent[person] = community;
+      person = temp;
+    }
+    return community;
+    }
+
+#+end_src
