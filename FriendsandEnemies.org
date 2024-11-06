@@ -1,0 +1,82 @@
+#+TITLE: Friends and Enemies
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> <stdlib.h> <string.h> :results output :noweb yes
+
+* Solution
+Test Case:
+#+begin_src bash :results output
+  echo "9" > fande
+  echo "1 0 1" >> fande
+  echo "1 1 2" >> fande
+  echo "1 3 4" >> fande
+  echo "1 5 6" >> fande
+  echo "2 1 7" >> fande
+  echo "2 5 8" >> fande
+  echo "1 2 5" >> fande
+  echo "0 0 0" >> fande
+  cat fande
+#+end_src
+
+#+RESULTS:
+: 9
+: 1 0 1
+: 1 1 2
+: 1 3 4
+: 1 5 6
+: 2 1 7
+: 2 5 8
+: 1 2 5
+: 0 0 0
+
+#+begin_src C :cmdline < fande
+  #define MAX_PEOPLE 9999
+
+  // The main function
+  int main(){
+    static int parent[MAX_PEOPLE], size[MAX_PEOPLE];
+    static int enemy_of[MAX_PEOPLE];
+    int num_people, i;
+    int op, person1, person2;
+    scanf("%d", &num_people);
+    for(i=0; i<num_people; i++){
+      parent[i] = i;
+      size[i] = 1;
+      enemy_of[i] = -1;
+    }
+
+    scanf("%d%d%d", &op, &person1, &person2);
+
+    while(op != 0){
+      if(op == 1)
+        if(are_enemies(person1, person2, parent, enemy_of))
+          printf("-1\n");
+        else
+          set_friends(person1, person2, parent, size, enemy_of);
+      else if(op == 2)
+        if(are_friends(person1, person2, parent))
+          printf("-1\n");
+        else
+          set_enemies(person1, person2, parent, size, enemy_of);
+
+    else if(op == 3)
+      if(are_friends(person1, person2, parent))
+        printf("1\n");
+      else 
+        printf("0\n");
+
+    else if(op == 4)
+      if(are_enemies(person1, person2, parent, enemy_of))
+        printf("1\n");
+      else
+        printf("0\n");
+
+    scanf("%d%d%d", &op, &person1, &person2);
+  }
+  return 0;
+  return 0;
+  }
+#+end_src
+
+#+RESULTS:
