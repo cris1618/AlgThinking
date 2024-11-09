@@ -30,7 +30,7 @@ Test Case:
 : 1 2 5
 : 0 0 0
 
-#+begin_src C :cmdline < fande
+#+begin_src C :cmdline < fande :tangle fed.c
   #define MAX_PEOPLE 9999
 
   int find(int person, int parent[]){
@@ -89,7 +89,17 @@ Test Case:
       enemy_of[set2] = person1;
     else
       union_sets(enemy, person1, parent, size);
+  }
 
+  int are_friends(int person1, int person2, int parent[]){
+    return find(person1, parent) == find(person2, parent);
+  }
+
+  int are_enemies(int person1, int person2, int parent[], int enemy_of[]){
+    int set1, enemy;
+    set1 = find(person1, parent);
+    enemy = enemy_of[set1];
+    return (enemy != -1) && (find(enemy, parent) == find(person2, parent));
   }
   // The main function
   int main(){
@@ -132,7 +142,6 @@ Test Case:
 
       scanf("%d%d%d", &op, &person1, &person2);
     }
-    return 0;
     return 0;
   }
 #+end_src
