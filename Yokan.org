@@ -1,0 +1,66 @@
+#+TITLE: Yokan
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> <stdlib.h> <string.h> :results output :noweb yes
+
+* Solution: Randomly choosing a piece
+Test Case:
+#+begin_src bash :results output
+  echo "14 4" > yokan
+  echo "1 3 4 2 1 1 2 4 1 2 2 4 1 1" >> yokan
+  echo "3" >> yokan
+  echo "3 11" >> yokan
+  echo "8 11" >> yokan
+  echo "5 6" >> yokan
+  cat yokan
+
+#+end_src
+
+#+RESULTS:
+: 14 4
+: 1 3 4 2 1 1 2 4 1 2 2 4 1 1
+: 3
+: 3 11
+: 8 11
+: 5 6
+
+#+begin_src C :cmdline < yokan
+  // Generating Random Numbers
+  int random_piece(int left, int width){
+    return (rand() % width) + left;
+  }
+
+  // Determining number of pieces
+  int lowest_index(int pieces[], int num_pieces, int at_least){
+    int low, high, mid;
+    low = 0;
+    high = num_pieces;
+    while(high - low >= 1){
+      mid = (low + high) / 2;
+      if(pieces[mid] < at_least)
+        low = mid + 1;
+      else
+        high = mid;
+    }
+    return low;
+  }
+
+  int num_in_range(int pieces[], int num_pieces, int left, int right){
+    int left_index = lowest_index(pieces, num_pieces, left);
+    int right_index = lowest_index(pieces, num_pieces, right + 1);
+    return right_index - left_index;
+  }
+
+
+// Guessing Flavors
+
+  int main(){
+    int num = random_piece(8, 4);
+    printf("%d", num);
+    return 0;
+  }
+#+end_src
+
+#+RESULTS:
+: 11
