@@ -247,3 +247,50 @@
 
 #+RESULTS: Doing Less Work
 : No Two snowflakes are alike
+** Solution without malloc (Appendix B)
+#+begin_src C
+  #define SIZE 100000
+  // Modified function
+  void identify_identical(int snowflakes[][6], int heads[], int nodes[]){
+    int i, node1, node2;
+    for(i=0; i<SIZE; i++){
+      node1 = heads[i];
+      while(node1 != -1){
+        node2 = nodes[node1];
+        while(node2 != -1){
+          if(are_identical(snowflakes[node1], snowflakes[node2])){
+            printf("Twin snowflakes found.\n");
+            return;
+          }
+          node2 = nodes[node2];
+        }
+        node1 = nodes[node1];
+      }
+    }
+    printf("No two snowflakes are alike.\n");
+  }
+
+  // Modified Main Function
+  int main(){
+    static int snowflakes[SIZE][6];
+    static int heads[SIZE];
+    static int nodes[SIZE];
+
+    int n;
+    int i, j, snowflake_code;
+    for(i=0; i<SIZE; i++){
+      heads[i] = -1;
+      nodes[i] = -1;
+    }
+    scanf("%d", &n);
+    for(i=0; i<n; i++){
+      for(j=0; j<6; j++)
+        scanf("%d", %snowflakes[i]);
+      snowflake_code = code(snowflakes[i]);
+      nodes[i] = heads[snowflake_code];
+      heads[snowflake_code] = i;
+    }
+    identify_identical(snowflakes, heads, nodes);
+    return 0;
+  }
+#+end_src
