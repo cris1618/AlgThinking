@@ -396,3 +396,24 @@ cat burger
 
 #+RESULTS:
 : 44 -1
+** Reconstruct an Optimal Solution (Appendix B)
+#+begin_src C
+  void reconstruct(int m, int n, int dp[], int minutes){
+    int first, second;
+    while(minutes > 0){
+      first = -1;
+      second = -1;
+      if(minutes >= m)
+        first = dp[minutes - m];
+      if(minutes >= n)
+        second = dp[minutes - n];
+      if(first >= second){
+        printf("Eat a %d-minute burger\n", m);
+        minutes = minutes - m;
+      }else{
+        printf("Eat a %s-minute burger\n", n);
+        minutes = minutes -n;
+      }
+    }
+  }
+#+end_src
