@@ -107,3 +107,17 @@
   #+end_src
 
   #+RESULTS:
+* Appendix B (Encoding Moves)
+- Update the way in which we add positions of the Knight.
+#+begin_src C
+  int row_dif[8] = {1, 1, -1, -1, 2, 2, -2, -2};
+  int col_dif[8] = {2, -2, 2, -2, 1, -1, 1, -1};
+
+  for(int m = 0; m<8; m++)
+    add_position(from_row, from_col, 
+                 from_row + row_dif[m], from_col + col_dif[m],
+                 num_rows, num_cols, new_positions,
+                 &num_new_positions, min_moves); 
+#+end_src
+
+#+RESULTS:
