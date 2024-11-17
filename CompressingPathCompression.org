@@ -1,0 +1,43 @@
+#+TITLE: Compressing Path Compression (Appendix B)
+#+AUTHOR: Cristian Del Gobbo (pledged)
+#+SUBTITLE: Problem taken from the book "Algorithmic Thinking" by Daniel Zingaro
+#+STARTUP: overview hideblocks indent
+#+PROPERTY: header-args:C :main yes :includes <stdio.h> <stdlib.h> <string.h> :results output :noweb yes
+
+* Dense Compression Implementation
+- One line implementation
+#+begin_src C 
+  int find(int p, int parent[]){
+    return p == parent[p] ? p : (parent[p] = find(parent[p], parent));
+  }
+#+end_src
+
+#+RESULTS:
+
+- Decompress with standard =if-else=
+#+begin_src C
+  int find(int p, int parent[]){
+    if(p == parent[p])
+      return p;
+    else
+      return parent[p] = find(parent[p], parent);
+  }
+#+end_src
+
+#+RESULTS:
+
+- Cleaner Assignment Operator
+#+begin_src C
+  int find(int p, int person[]){
+    int community;
+    if(p == parent[p])
+      return p;
+    else{
+      community = find(parent[p], parent);
+      parent[p] = community; 
+      return community;
+    }
+  }
+
+#+end_src
+
